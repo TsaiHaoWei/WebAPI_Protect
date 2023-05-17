@@ -27,7 +27,6 @@ namespace MyWebAPI.Controllers
          [HttpGet] 這個標籤表示這個方法要用HttpGet的方法取得
         [Route("getProduct")] 表示getProduct會轉進這個方法處理 EX:127.0.0.1/api/product/getProduct
          */
-        [ApiBasicAuthenticationFilter]
         [HttpGet]
         [Route("getProduct")]
         public List<Product> GetProducts()
