@@ -27,7 +27,6 @@ namespace MyWebAPI.DataBase
             sqlBuilder.DataSource = DBSetup()["ServerName"];
             sqlBuilder.InitialCatalog = DBSetup()["Database"];
             sqlBuilder.UserID = DBSetup()["LogId"];
-            TextEncoderSettings
             sqlBuilder.Password = DBSetup()["LogPass"]; 
             sqlBuilder.ApplicationName = "MVCDataBase";
             SysConnectString = sqlBuilder.ToString();
