@@ -3,6 +3,7 @@ using System;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
+using System.Text.Encodings.Web;
 
 namespace MyWebAPI.DataBase
 {
@@ -26,7 +27,8 @@ namespace MyWebAPI.DataBase
             sqlBuilder.DataSource = DBSetup()["ServerName"];
             sqlBuilder.InitialCatalog = DBSetup()["Database"];
             sqlBuilder.UserID = DBSetup()["LogId"];
-            sqlBuilder.Password = DBSetup()["LogPass"];
+            TextEncoderSettings
+            sqlBuilder.Password = DBSetup()["LogPass"]; 
             sqlBuilder.ApplicationName = "MVCDataBase";
             SysConnectString = sqlBuilder.ToString();
 
