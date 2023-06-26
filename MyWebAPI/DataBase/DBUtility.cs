@@ -28,6 +28,7 @@ namespace MyWebAPI.DataBase
             sqlBuilder.InitialCatalog = DBSetup()["Database"];
             sqlBuilder.UserID = DBSetup()["LogId"];
             sqlBuilder.Password = DBSetup()["LogPass"]; 
+            test
             sqlBuilder.ApplicationName = "MVCDataBase";
             SysConnectString = sqlBuilder.ToString();
 
