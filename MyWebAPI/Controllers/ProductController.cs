@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using MyWebAPI.DataBase;
 using MyWebAPI.Model;
+using MyWebAPI.Model.UserModel;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -39,15 +40,53 @@ namespace MyWebAPI.Controllers
             DBAccess();
             return DBController.getProduct();
         }
+        
         [HttpPost]
         [Route("CreateProduct")]
-        public string CreateProduct(Product product)
+        public string CreateProduct(ProductUserModel product)
         {
-            //products.Add(product);
-            return $"{JsonConvert.SerializeObject(product)}商品已加入清單";
+            DBAccess();
+
+            List<Product> listProduct = new List<Product>();
+            listProduct.Add(new Product { ProductID = String.Format("{0:0000}", DBUtility.StroreProcedure("ProductID")), ProductName = product.ProductName });
+            //PName.Add(product.ProductName);
+
+            if (DBController.insertProduct(listProduct))
+                return $"{JsonConvert.SerializeObject(product)}商品已加入清單";
+            else
+                return "資料庫錯誤";
+        }
+        [HttpGet]
+        [Route("getProductPrice")]
+        public List<P_MarketPrice> GetProductPrice()
+        {
+            DBAccess();
+            return DBController.getProductPrice();
+        }
+
+        [HttpPost]
+        [Route("CreateProductPrice")]
+        public string CreateProduct(P_MarketPriceUserModel product)
+        {
+            DBAccess();
+
+            List<P_MarketPrice> listP_Price = new List<P_MarketPrice>();
+            listP_Price.Add(new P_MarketPrice
+            {
+                ProductID = DBController.getProduct().Find(var => var.ProductName.Equals(product.ProductName)).ProductID,
+                Price = int.Parse(product.Price),
+                Location = product.Location,
+                Capacity =int.Parse(product.Capacity),
+                Price_100g =(int)Convert.ToDouble(int.Parse(product.Price)*100) / int.Parse(product.Capacity) 
+            });
+
+            if (DBController.insertProductPrice(listP_Price))
+                return $"{JsonConvert.SerializeObject(product)}商品已加入清單";
+            else
+                return "資料庫錯誤";
         }
     }
-    
 
-   
+
+
 }
