@@ -4,6 +4,8 @@ using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Text.Encodings.Web;
+using Dapper;
+using System.Data;
 
 namespace MyWebAPI.DataBase
 {
@@ -70,7 +72,62 @@ namespace MyWebAPI.DataBase
             }
             return bRet;
         }
-  
+        public static void DBError(string ErrorString)
+        {
+
+
+            //檔案名稱 使用現在日期
+            String logFileName = DateTime.Now.Year.ToString() + int.Parse(DateTime.Now.Month.ToString()).ToString("00") + int.Parse(DateTime.Now.Day.ToString()).ToString("00") + ".txt";
+
+            //Log檔內的時間 使用現在時間
+            String nowTime = int.Parse(DateTime.Now.Hour.ToString()).ToString("00") + ":" + int.Parse(DateTime.Now.Minute.ToString()).ToString("00") + ":" + int.Parse(DateTime.Now.Second.ToString()).ToString("00");
+            if (!Directory.Exists(SystemParameterPath.AppPath+"\\Log"))
+            {
+                //建立資料夾
+                Directory.CreateDirectory(SystemParameterPath.AppPath + "\\Log");
+            }
+            string path = SystemParameterPath.AppPath + "\\Log\\";
+
+            if (!File.Exists(path + logFileName))
+            {
+                //建立檔案
+                File.Create(path + logFileName).Close();
+            }
+
+            using (StreamWriter sw = File.AppendText(path + logFileName))
+            {
+                //WriteLine為換行 
+                sw.Write(nowTime + "---->");
+                sw.WriteLine(ErrorString);
+                sw.WriteLine("");
+            }
+        }
+        public static int StroreProcedure(string room)
+        {
+            try
+            {
+                DynamicParameters parm = new DynamicParameters();
+                //intput
+                parm.Add("@Room", room, dbType: DbType.String);
+                //output
+                parm.Add("@SeqNo", dbType: DbType.Int32, direction: ParameterDirection.ReturnValue);
+
+                using (SqlConnection SysConn = new SqlConnection(SysConnectString))
+                {
+                    SysConn.Execute("GetSequence", parm, commandType: CommandType.StoredProcedure);
+                }
+                return parm.Get<int>("@SeqNo");
+            }
+            catch
+            {
+                return -1;
+            }
+        }
+
+
+
+
+
 
     }
 }
