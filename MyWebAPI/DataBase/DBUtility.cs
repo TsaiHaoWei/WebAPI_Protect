@@ -67,7 +67,8 @@ namespace MyWebAPI.DataBase
                 }
                 catch (Exception ex)
                 {
-                    throw ex;
+
+                    return false;
                 }
             }
             return bRet;

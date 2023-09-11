@@ -77,7 +77,7 @@ namespace MyWebAPI.Controllers
                 Price = int.Parse(product.Price),
                 Location = product.Location,
                 Capacity =int.Parse(product.Capacity),
-                Price_100g =(int)Convert.ToDouble(int.Parse(product.Price)*100) / int.Parse(product.Capacity) 
+                Price_100g =Convert.ToDouble(int.Parse(product.Price)) / int.Parse(product.Capacity) 
             });
 
             if (DBController.insertProductPrice(listP_Price))
